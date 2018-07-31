@@ -105,7 +105,7 @@ class LightMask
 	
 	/**
 	 * Set global intensity of the light sources
-	 * Intensity is a measure of how far lights preads
+	 * Intensity is a measure of how far light spreads
 	 */
 	public function setIntensity(i:Float)
 	{
