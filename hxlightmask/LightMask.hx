@@ -162,10 +162,6 @@ class LightMask
 		neighbor2 = Math.max(here, neighbor2);
 		
 		var value = Math.max(0.0, Math.max(neighbor1, neighbor2) - local_falloff);
-		if (Math.isNaN(value))
-		{
-			trace("BOINK");
-		}
 		return value;
 	}
 	
