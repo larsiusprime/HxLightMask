@@ -1,0 +1,11 @@
+{
+ "name": "hxlightmap",
+ "url" : "https://github.com/larsiusprime/hxlightmap",
+ "license": "MIT",
+ "tags": ["lighting","2D","map","procgen","roguelike","game"],
+ "description": "A tiny 2D flood-fill lighting engine for Haxe",
+ "version": "0.0.0",
+ "releasenote": "",
+ "contributors": ["larsiusprime"],
+ "dependencies": {}
+}
