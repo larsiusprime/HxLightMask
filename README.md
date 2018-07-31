@@ -8,9 +8,15 @@ Ported from [nick-paul/LightMask](https://github.com/nick-paul/LightMask). All c
 # Running the demo
 The demo requires OpenFL 8 to run (older versions will probably work too). The LightMask engine itself is a single Haxe file, has no external dependencies, and is framework agnostic.
 
+Install libraries:
 ```
 haxelib install openfl
-cd LightMask
+haxelib dev hxlightmask path/to/HxLightMask
+```
+
+Build & run demo:
+```
+cd path/to/HxLightMask
 cd demo
 lime test html5
 ```
