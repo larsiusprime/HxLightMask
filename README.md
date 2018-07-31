@@ -1,7 +1,7 @@
 # HxLightMask
 A tiny 2D flood-fill lighting engine for Haxe
 
-Ported from [nick-paul/LightMask](https://github.com/nick-paul/LightMask)
+Ported from [nick-paul/LightMask](https://github.com/nick-paul/LightMask). All credit for this idea and basic algorithm goes to [nick-paul](https://github.com/nick-paul). Also the documentation is based on nick's.
 
 ![](preview.gif)
 
@@ -25,7 +25,7 @@ The demo will run on any platform OpenFL supports, including win/mac/linux destk
     var lightmask:LightMask = new LightMask(WIDTH, HEIGHT);
     // Intensity: Proportional to how far light spreads
     lightmask.setIntensity(40.0);
-    // Ambient: Ambient light (0.0f - 1.0f)
+    // Ambient: Ambient light (0.0 - 1.0)
     lightmask.setAmbient(0.4);
 
     // Array representing wall opacities (1.0: solid, 0.0: clear)
@@ -43,7 +43,7 @@ The demo will run on any platform OpenFL supports, including win/mac/linux destk
 
     // All lights must be added between `reset()` and `computeMask()`
     // Add a light with given brightness at location (x,y)
-    // brightness: 0.0 = no light, 1.0f = full light
+    // brightness: 0.0 = no light, 1.0 = full light
     lightmask.addLight(x, y, brightness);
 
     // Compute the mask
