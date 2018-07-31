@@ -21,7 +21,7 @@ cd demo
 lime test html5
 ```
 
-The demo will run on any platform OpenFL supports, including win/mac/linux destkop, HTML5, and Flash.
+The demo will run on any platform OpenFL supports, including win/mac/linux destkop, HTML5, Flash, etc.
 
 # How to use
 
