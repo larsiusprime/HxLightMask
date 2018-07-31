@@ -6,7 +6,7 @@ Ported from [nick-paul/LightMask](https://github.com/nick-paul/LightMask). All c
 ![](preview.gif)
 
 # Running the demo
-The demo requires OpenFL 8 to run (older versions will probably work too). The LightMask engine itself has no external dependencies. 
+The demo requires OpenFL 8 to run (older versions will probably work too). The LightMask engine itself is a single Haxe file, has no external dependencies, and is framework agnostic.
 
 ```
 haxelib install openfl
