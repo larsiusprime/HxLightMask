@@ -70,7 +70,7 @@ To compute the color of a tile at location `(x,y)` for rendering, multiply the c
 ```Haxe
     // Assume the call `map.getTileColor(x,y)`
     // gets the color of the map tile at location (x,y)
-    Color color = map.getTileColor(x,y);
+    var color:Color = map.getTileColor(x,y);
 
     // Multiply each of the channels by the light mask
     // 0.0: dark, 1.0: bright
