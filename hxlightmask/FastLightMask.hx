@@ -105,7 +105,7 @@ class FastLightMask
 	
 	/**
 	 * Set global intensity of the light sources
-	 * Intensity is a measure of how far lights preads
+	 * Intensity is a measure of how far light spreads
 	 */
 	public function setIntensity(i:Float)
 	{
@@ -125,7 +125,7 @@ class FastLightMask
 		ambient_ = Math.max(0.0, Math.min(1.0, a));
 	}
 	 
-	private var width_:Int;			// width of the height mask
+	private var width_:Int;			// width of the light mask
 	private var height_:Int;		// height of the light mask
 	private var intensity_:Float;	// how far light spreads
 	private var falloff_:Float;		// 1 / intensity
