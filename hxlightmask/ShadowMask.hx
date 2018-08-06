@@ -148,32 +148,41 @@ class ShadowMask
 			
 			if (visor.destX > visor.x)
 			{
+				Sys.println("A");
 				if (visor.destY > visor.y)
 				{
+					Sys.println("0A");
 					if (visor.destX == visor1.destX)
 					{
 						destX = visor1.destX;
 						destY = visor2.destY;
+						Sys.println("0A1");
 					}
 					else
 					{
+						Sys.println("0A2");
 						if (visor.destY == visor2.destY)
 						{
 							destX = visor1.destX;
 							destY = visor2.destY;
+							Sys.println("0A1A");
 						}
 						else{
 							destX = visor2.destX;
 							destY = visor1.destY;
+							Sys.println("0A1B");
+						
 						}
 					}
 				}
-				else if (visor.destY < visor.y)
+				else if (visor.destY <= visor.y)
 				{
+					Sys.println("1A");
 					if (visor.destY == visor2.destY)
 					{
 						destX = visor1.destX;
 						destY = visor2.destY;
+						Sys.println("1A1");
 					}
 					else
 					{
@@ -213,7 +222,7 @@ class ShadowMask
 						}
 					}
 				}
-				else if (visor.destY > visor.y)
+				else if (visor.destY >= visor.y)
 				{
 					if (visor.destY == visor2.destY)
 					{
@@ -235,11 +244,6 @@ class ShadowMask
 					}
 				}
 			}
-			
-			Sys.println("x = " + lox + "..." + hix + " @ y = " + destY + " |  y = " + loy + "..." + hiy + " @ x = " + destX);
-			
-			//drawLine(walls, visor1.x, visor1.y, visor1.destX, visor1.destY);
-			//drawLine(walls, visor2.x, visor2.y, visor2.destX, visor2.destY);
 			
 			for (x in lox...hix + 1)
 			{
