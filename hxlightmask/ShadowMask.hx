@@ -87,7 +87,6 @@ class ShadowMask
 	
 	private function sweepVisor(walls:Array<Int>, visor:Visor)
 	{
-		
 		var visor1 = new Visor(0, 0, 0, 0);
 		var visor2 = new Visor(0, 0, 0, 0);
 		
@@ -148,41 +147,33 @@ class ShadowMask
 			
 			if (visor.destX > visor.x)
 			{
-				Sys.println("A");
 				if (visor.destY > visor.y)
 				{
-					Sys.println("0A");
 					if (visor.destX == visor1.destX)
 					{
 						destX = visor1.destX;
 						destY = visor2.destY;
-						Sys.println("0A1");
 					}
 					else
 					{
-						Sys.println("0A2");
 						if (visor.destY == visor2.destY)
 						{
 							destX = visor1.destX;
 							destY = visor2.destY;
-							Sys.println("0A1A");
 						}
-						else{
+						else
+						{
 							destX = visor2.destX;
 							destY = visor1.destY;
-							Sys.println("0A1B");
-						
 						}
 					}
 				}
 				else if (visor.destY <= visor.y)
 				{
-					Sys.println("1A");
 					if (visor.destY == visor2.destY)
 					{
 						destX = visor1.destX;
 						destY = visor2.destY;
-						Sys.println("1A1");
 					}
 					else
 					{
