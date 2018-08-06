@@ -20,19 +20,18 @@
     <class path="T:\git\DefendersQuest1\libs\openfl8\lime" />
     <class path="T:\git\hxlightmask" />
     <class path="src" />
-    <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\core\flash" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\core\openfl" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\extras" />
-    <class path="bin\flash\haxe" />
+    <class path="bin\neko\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=8.2.2&#xA;lime=6.4.0&#xA;hxlightmap=0.0.0&#xA;hxlightmask=0.0.0&#xA;tools=6.4.0&#xA;no-compilation&#xA;openfl-flash&#xA;web&#xA;display" />
+    <option directives="openfl=8.2.2&#xA;lime=6.4.0&#xA;hxlightmap=0.0.0&#xA;hxlightmask=0.0.0&#xA;tools=6.4.0&#xA;no-compilation&#xA;native&#xA;lime-native&#xA;lime-vorbis&#xA;openfl-native&#xA;lime-cffi&#xA;windows&#xA;desktop&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;-swf-version 17&#xA;-debug " />
+    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;--remap flash:openfl&#xA;-debug " />
   </build>
   <!-- haxelib libraries -->
   <haxelib>
