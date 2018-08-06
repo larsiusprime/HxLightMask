@@ -12,7 +12,7 @@ class ShadowMask
 	//  Data Members  //
 	////////////////////
 	
-	/**The mask: All values range from 0 to 1**/
+	/**The shadow mask: All values range from 0 to 1**/
 	public var mask:Array<Int>;
 	
 	public var visors:Array<Visor>;
@@ -37,7 +37,7 @@ class ShadowMask
 	}
 	
 	/**
-	 * Add a light to the mask
+	 * Add a visor to the mask
 	 * @param	x
 	 * @param	y
 	 * @param	br
@@ -87,6 +87,12 @@ class ShadowMask
 	
 	private function sweepVisor(walls:Array<Int>, visor:Visor)
 	{
+		if (visor.quadrant != Direction.NONE)
+		{
+			sweepMapQuadrant(walls, visor.x, visor.y, visor.quadrant);
+			return;
+		}
+		
 		var visor1 = new Visor(0, 0, 0, 0);
 		var visor2 = new Visor(0, 0, 0, 0);
 		
@@ -333,9 +339,13 @@ class ShadowMask
 				for (y in 0...height_){
 					drawLine(walls, ox, oy, width_ - 1, y);
 				}
+			default://donothing
 		}
 	}
 	
+	/*************************
+	 * Shape drawing functions
+	**************************/
 	private function drawLine(walls:Array<Int>, x1:Int, y1:Int, x2:Int, y2:Int)
 	{
 		if (Math.abs(y2 - y1) < Math.abs(x2 - x1))
@@ -443,6 +453,8 @@ class Visor
 	public var x:Int;
 	public var y:Int;
 	
+	public var quadrant:Direction;
+	
 	public var vecX(default, null):Float;
 	public var vecY(default, null):Float;
 	
@@ -457,10 +469,11 @@ class Visor
 	public var coneX2:Int = -1;
 	public var coneY2:Int = -1;
 	
-	public function new(x:Int, y:Int, vecX:Float, vecY:Float)
+	public function new(x:Int, y:Int, vecX:Float, vecY:Float, quadrant:Direction=NONE)
 	{
 		this.x = x;
 		this.y = y;
+		this.quadrant = quadrant;
 		setLookVector(vecX, vecY);
 	}
 	

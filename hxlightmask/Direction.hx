@@ -9,4 +9,5 @@ package hxlightmask;
 	var EAST:Int = 1;
 	var SOUTH:Int = 2;
 	var WEST:Int = 3;
+	var NONE:Int = -1;
 }

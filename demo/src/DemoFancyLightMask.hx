@@ -2,6 +2,8 @@ package demo.src;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import hxlightmask.Direction;
+import hxlightmask.FancyLightMask;
+import hxlightmask.FastLightMask;
 import hxlightmask.ShadowMask;
 import openfl.Lib;
 import openfl.display.Sprite;
@@ -12,7 +14,7 @@ import openfl.events.KeyboardEvent;
  * ...
  * @author 
  */
-class DemoShadowMask extends Sprite
+class DemoFancyLightMask extends Sprite
 {
 	private var bmpData:BitmapData;
 	
@@ -24,7 +26,8 @@ class DemoShadowMask extends Sprite
 	private var _height:Int = 128;
 	
 	private var visor:Visor;
-	private var shadowMask:ShadowMask;
+	private var light:Light;
+	private var lightMask:FancyLightMask;
 	
 	private var mx:Int = 0;
 	private var my:Int = 0;
@@ -104,15 +107,18 @@ class DemoShadowMask extends Sprite
 		bmp.scaleX = 4;
 		bmp.scaleY = 4;
 		
-		shadowMask = new ShadowMask(_width, _height);
+		lightMask = new FancyLightMask(_width, _height);
 		
 		visor = new Visor(64, 64, 1, 1);
 		visor.fovRadians = Math.PI / 5;
-		shadowMask.addVisor(visor);
-		shadowMask.computeMask(walls);
 		
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		light = new Light(64, 64, 1, 0.025, LINEAR);
+		lightMask.addLight(light);
+		lightMask.computeMask(walls);
+		
+		//Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		draw();
 	}
 	
 	private function onKeyDown(e:KeyboardEvent)
@@ -158,13 +164,8 @@ class DemoShadowMask extends Sprite
 		mx = _mx;
 		my = _my;
 		
-		visor.x = mx;
-		visor.y = my;
-		
-		shadowMask.reset();
-		
-		shadowMask.computeMask(walls);
-		
+		light.x = mx;
+		light.y = my;
 		
 		draw();
 	}
@@ -172,6 +173,11 @@ class DemoShadowMask extends Sprite
 	private function draw()
 	{
 		bmpData.fillRect(bmpData.rect, 0);
+		
+		lightMask.reset();
+		lightMask.computeMask(walls);
+		
+		lights = lightMask.mask;
 		
 		for(i in 0...walls.length)
 		{
@@ -183,15 +189,15 @@ class DemoShadowMask extends Sprite
 			}
 		}
 		
-		shadows = shadowMask.mask;
-		
-		for (i in 0...shadows.length)
+		for (i in 0...lights.length)
 		{
-			if (shadows[i] == 1)
+			if (lights[i] > 0)
 			{
 				var yy:Int = Std.int(i / _width);
 				var xx:Int = i % _width;
-				bmpData.setPixel(xx, yy, 0xFFFFFF);
+				var c:Int = lights[i];
+				c = c << 16 | c << 8 | c;
+				bmpData.setPixel(xx, yy, c);
 			}
 		}
 	}

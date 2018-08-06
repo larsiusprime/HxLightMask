@@ -22,7 +22,7 @@
     <class path="src" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\core\openfl" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\extras" />
-    <class path="bin\neko\haxe" />
+    <class path="bin\windows\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>

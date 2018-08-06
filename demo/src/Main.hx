@@ -2,6 +2,7 @@ package;
 
 import demo.src.DemoCircle;
 import demo.src.DemoFastLightMask;
+import demo.src.DemoFancyLightMask;
 import demo.src.DemoShadowMask;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
@@ -23,8 +24,9 @@ class Main extends Sprite
 	{
 		super();
 		
-		addChild(new DemoShadowMask());
-		//addChild(new DemoLightMask());
+		addChild(new DemoFancyLightMask());
+		//addChild(new DemoShadowMask());
+		//addChild(new DemoFashLightMask());
 		//addChild(new DemoCircle());
 	}
 }
