@@ -5,7 +5,7 @@ package hxlightmask;
  * See: https://github.com/nick-paul/LightMask for the original C++ version
  * @author 
  */
-class LightMask
+class FastLightMask
 {
 	////////////////////
 	//  Data Members  //
