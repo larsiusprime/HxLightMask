@@ -5,14 +5,14 @@ A collection of tiny-ish 2D lighting engine tools for Haxe (for grid-based games
 
 Above: the combined result of a `FancyLightMask` paired with a `ShadowMask`
 
-#FancyLightMask
+# FancyLightMask
 
 This is a simple ray-casting light mask that lets you put some lights in a scene that will respond properly to walls. All lights are spherical by default,
 and their only properties (beside location) is intensity and decay (aka "falloff").
 
 ![](fancy_lightmask.gif)
 
-#ShadowMask
+# ShadowMask
 
 This is also a simple ray-casting light mask, but this lets you decide what's NOT visible. 
 
@@ -22,7 +22,7 @@ You can place `Visor`s in the scene that represent visible areas, and you can bu
 The preview gif at the very top of this page is an example of using a `ShadowMask` and `FancyLightMask` together to create a flashlight effect -- a `Visor` and 
 a `Light` are placed in the same location and move together, and the shadow mask is used to occlude everything but the desired light cone.
 
-#FastLightMask
+# FastLightMask
 
 A *very* simple light mask, this doesn't use ray casting and doesn't produce spherical lights. On the plus side, it should be very fast and I don't think the computational cost
 grows with the number of lights (unlike the above solutions). Perfectly useful for simpler purposes, or in scenes with cramped quarters.
