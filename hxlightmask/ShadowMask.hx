@@ -1,5 +1,4 @@
 package hxlightmask;
-import hxlightmask.ShadowMask.Visor;
 
 /**
  * A tiny flood-fill lighting engine based on @_npaul's original
@@ -66,7 +65,7 @@ class ShadowMask
 	{
 		for (v in visors)
 		{
-			sweepVisor(walls, v);
+			sweepVisor2(walls, v);
 		}
 	}
 	 
@@ -85,14 +84,66 @@ class ShadowMask
 	 */
 	private inline function idx(x:Int, y:Int):Int { return x + (y * width_); }
 	
-	private function sweepVisor(walls:Array<Int>, visor:Visor)
+	private function sweepVisor2(walls:Array<Int>, visor:Visor)
 	{
 		if (visor.quadrant != Direction.NONE)
 		{
-			sweepMapQuadrant(walls, visor.x, visor.y, visor.quadrant);
+			sweepMapQuadrant(walls, visor, visor.quadrant, true);
 			return;
 		}
-		
+		else
+		{
+			var visor1 = new Visor(0, 0, 0, 0);
+			var visor2 = new Visor(0, 0, 0, 0);
+			
+			visor.getRotated (-visor.fovRadians/2, visor1);
+			visor.getRotated ( visor.fovRadians/2, visor2);
+			
+			calcVisorDestination(visor);
+			calcVisorDestination(visor1);
+			calcVisorDestination(visor2);
+			
+			var quadrant1:Direction = NONE;
+			var quadrant2:Direction = NONE;
+			var quadrant3:Direction = NONE;
+			
+			     if (visor1.destX == 0) quadrant1 = Direction.WEST;
+			else if (visor1.destY == 0) quadrant1 = Direction.NORTH;
+			else if (visor1.destX == width_-1) quadrant1 = Direction.EAST;
+			else if (visor1.destY == height_ -1) quadrant1 = Direction.SOUTH;
+			
+			     if (visor2.destX == 0) quadrant2 = Direction.WEST;
+			else if (visor2.destY == 0) quadrant2 = Direction.NORTH;
+			else if (visor2.destX == width_-1) quadrant2 = Direction.EAST;
+			else if (visor2.destY == height_ -1) quadrant2 = Direction.SOUTH;
+			
+			     if (visor.destX == 0) quadrant3 = Direction.WEST;
+			else if (visor.destY == 0) quadrant3 = Direction.NORTH;
+			else if (visor.destX == width_-1) quadrant3 = Direction.EAST;
+			else if (visor.destY == height_ -1) quadrant3 = Direction.SOUTH;
+			
+			visor.coneX1 = visor1.destX;
+			visor.coneY1 = visor1.destY;
+			visor.coneX2 = visor2.destX;
+			visor.coneY2 = visor2.destY;
+			
+			sweepMapQuadrant(walls, visor, quadrant1, false);
+			sweepMapQuadrant(walls, visor, quadrant2, false);
+			
+			if (quadrant3 != quadrant1 && quadrant3 != quadrant2)
+			{
+				sweepMapQuadrant(walls, visor, quadrant3, true);
+				if (Math.abs(quadrant1 - quadrant3) == 2 || Math.abs(quadrant2 - quadrant3) == 2)
+				{
+					var quadrant4:Direction = (Direction.NORTH + Direction.WEST + Direction.EAST + Direction.SOUTH) - (Std.int(quadrant1) + Std.int(quadrant2) + Std.int(quadrant3));
+					sweepMapQuadrant(walls, visor, quadrant4, true);
+				}
+			}
+		}
+	}
+	
+	private function sweepVisor(walls:Array<Int>, visor:Visor)
+	{
 		var visor1 = new Visor(0, 0, 0, 0);
 		var visor2 = new Visor(0, 0, 0, 0);
 		
@@ -319,24 +370,120 @@ class ShadowMask
 		visor.destY = Math.round(destY);
 	}
 	
-	private function sweepMapQuadrant(walls:Array<Int>, ox:Int, oy:Int, direction:Direction)
+	private function sweepMapQuadrant(walls:Array<Int>, visor:Visor, direction:Direction, full:Bool)
 	{
+		var ox = visor.x;
+		var oy = visor.y;
+		var start = 0;
+		var max = 0;
 		switch(direction)
 		{
 			case Direction.NORTH:
-				for (x in 0...width_){
+				if (full)
+				{
+					max = width_;
+				}
+				else if (visor.coneY1 == 0 && visor.coneY2 == 0)
+				{
+					start = visor.coneX1;
+					max = visor.coneX2;
+				}
+				else if (visor.coneY1 == 0)
+				{
+					start = visor.coneX1;
+					max = width_;
+				}
+				else if (visor.coneY2 == 0)
+				{
+					start = 0;
+					max = visor.coneX2;
+				}
+				else
+				{
+					max = width_;
+				}
+				for (x in start...max){
 					drawLine(walls, ox, oy, x, 0);
 				}
 			case Direction.SOUTH:
-				for (x in 0...width_){
+				if (full)
+				{
+					max = width_;
+				}
+				else if (visor.coneY1 == height_-1 && visor.coneY2 == height_-1)
+				{
+					start = visor.coneX2;
+					max = visor.coneX1;
+				}
+				else if (visor.coneY1 == height_-1)
+				{
+					start = 0;
+					max = visor.coneX1;
+				}
+				else if (visor.coneY2 == height_-1)
+				{
+					start = visor.coneX2;
+					max = width_;
+				}
+				else
+				{
+					max = width_;
+				}
+				for (x in start...max){
 					drawLine(walls, ox, oy, x, height_ - 1);
 				}
 			case Direction.WEST:
-				for (y in 0...height_){
+				if (full)
+				{
+					max = height_;
+				}
+				if (visor.coneX1 == 0 && visor.coneX2 == 0)
+				{
+					start = visor.coneY2;
+					max = visor.coneY1;
+				}
+				else if (visor.coneX1 == 0)
+				{
+					start = 0;
+					max = visor.coneY1;
+				}
+				else if (visor.coneX2 == 0)
+				{
+					start = visor.coneY2;
+					max = height_;
+				}
+				else
+				{
+					max = height_;
+				}
+				for (y in start...max){
 					drawLine(walls, ox, oy, 0, y);
 				}
 			case Direction.EAST:
-				for (y in 0...height_){
+				if (full)
+				{
+					max = height_;
+				}
+				if (visor.coneX1 == width_-1 && visor.coneX2 == width_-1)
+				{
+					start = visor.coneY1;
+					max = visor.coneY2;
+				}
+				else if (visor.coneX1 == width_-1)
+				{
+					start = visor.coneY1;
+					max = height_;
+				}
+				else if (visor.coneX2 == width_-1)
+				{
+					start = 0;
+					max = visor.coneY2;
+				}
+				else
+				{
+					max = height_;
+				}
+				for (y in start...max){
 					drawLine(walls, ox, oy, width_ - 1, y);
 				}
 			default://donothing
@@ -445,54 +592,5 @@ class ShadowMask
 			}
 			e = e + 2 * dx;
 		}
-	}
-}
-
-class Visor
-{
-	public var x:Int;
-	public var y:Int;
-	
-	public var quadrant:Direction;
-	
-	public var vecX(default, null):Float;
-	public var vecY(default, null):Float;
-	
-	public var destX:Int = -1;
-	public var destY:Int = -1;
-	
-	public var fovRadians:Float;
-	
-	public var coneX1:Int = -1;
-	public var coneY1:Int = -1;
-	
-	public var coneX2:Int = -1;
-	public var coneY2:Int = -1;
-	
-	public function new(x:Int, y:Int, vecX:Float, vecY:Float, quadrant:Direction=NONE)
-	{
-		this.x = x;
-		this.y = y;
-		this.quadrant = quadrant;
-		setLookVector(vecX, vecY);
-	}
-	
-	public function setLookVector(vecX:Float, vecY:Float)
-	{
-		var magnitude = Math.sqrt(vecX * vecX + vecY * vecY);
-		this.vecX = vecX / magnitude;
-		this.vecY = vecY / magnitude;
-	}
-	
-	public function getRotated(radians:Float, output:Visor)
-	{
-		output.x = x;
-		output.y = y;
-		
-		var ca = Math.cos(radians);
-		var sa = Math.sin(radians);
-		
-		output.vecX = ca * vecX - sa * vecY;
-		output.vecY = sa * vecX + ca * vecY;
 	}
 }

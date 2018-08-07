@@ -1,10 +1,6 @@
 package hxlightmask;
-import hxlightmask.FancyLightMask.LightDecay;
-import hxlightmask.ShadowMask.Visor;
 
 /**
- * A tiny flood-fill lighting engine based on @_npaul's original
- * See: https://github.com/nick-paul/LightMask for the original C++ version
  * @author 
  */
 class FancyLightMask
@@ -121,7 +117,6 @@ class FancyLightMask
 		var kinks:Array<Int> = [0];
 		
 		var intensity:Float = l.intensity;
-		var decayType:LightDecay = l.decayType;
 		var decay:Float = l.decay;
 		
 		var max = width_ > height_ ? width_ : height_;
@@ -171,7 +166,7 @@ class FancyLightMask
 		
 		s.computeMask(myWalls);
 		
-		drawRings(lx, ly, radius, myLight, myW, intensity, decay, decayType);
+		drawRings(lx, ly, radius, myLight, myW, intensity, decay);
 		
 		for (iy in 0...myH)
 		{
@@ -194,25 +189,25 @@ class FancyLightMask
 	 * Shape drawing functions
 	**************************/
 	
-	private function castRay(walls:Array<Int>, x1:Int, y1:Int, x2:Int, y2:Int, output:Array<Int>, w:Int, intensity:Float, decay:Float, decayType:LightDecay)
+	private function castRay(walls:Array<Int>, x1:Int, y1:Int, x2:Int, y2:Int, output:Array<Int>, w:Int, intensity:Float, decay:Float)
 	{
 		if (Math.abs(y2 - y1) < Math.abs(x2 - x1))
 		{
 			if (x1 > x2)
-				castRayEast(walls, x1, y1, x2, y2, true, output, w, intensity, decay, decayType);
+				castRayEast(walls, x1, y1, x2, y2, true, output, w, intensity, decay);
 			else
-				castRayEast(walls, x1, y1, x2, y2, false, output, w, intensity, decay, decayType);
+				castRayEast(walls, x1, y1, x2, y2, false, output, w, intensity, decay);
 		}
 		else
 		{
 			if (y1 > y2)
-				castRaySouth(walls, x1, y1, x2, y2, true, output, w, intensity, decay, decayType);
+				castRaySouth(walls, x1, y1, x2, y2, true, output, w, intensity, decay);
 			else
-				castRaySouth(walls, x1, y1, x2, y2, false, output, w, intensity, decay, decayType);
+				castRaySouth(walls, x1, y1, x2, y2, false, output, w, intensity, decay);
 		}
 	}
 	
-	private function castRayEast(walls:Array<Int>, x1:Int, y1:Int, x2:Int, y2:Int, flip:Bool, output:Array<Int>, w:Int, intensity:Float, decay:Float, decayType:LightDecay)
+	private function castRayEast(walls:Array<Int>, x1:Int, y1:Int, x2:Int, y2:Int, flip:Bool, output:Array<Int>, w:Int, intensity:Float, decay:Float)
 	{
 		if (flip)
 		{
@@ -237,13 +232,7 @@ class FancyLightMask
 		for (x in x1...x2 + 1)
 		{
 			c = Std.int(255 * intensity);
-			intensity = switch(decayType)
-			{
-				case LINEAR: intensity - decay;
-				case QUADRATIC: intensity * (1 - decay);
-				case CUBIC: intensity * (1 - decay) * (1 - decay);
-				default: intensity; //donothing
-			}
+			intensity -= decay;
 			
 			var finalx = x;
 			
@@ -264,7 +253,7 @@ class FancyLightMask
 		}
 	}
 	
-	private function castRaySouth(walls:Array<Int>, x1:Int, y1:Int, x2:Int, y2:Int, flip:Bool, output:Array<Int>, w:Int, intensity:Float, decay:Float, decayType:LightDecay)
+	private function castRaySouth(walls:Array<Int>, x1:Int, y1:Int, x2:Int, y2:Int, flip:Bool, output:Array<Int>, w:Int, intensity:Float, decay:Float)
 	{
 		if (flip)
 		{
@@ -290,13 +279,7 @@ class FancyLightMask
 		for (y in y1...y2 + 1)
 		{
 			c = Std.int(255 * intensity);
-			intensity = switch(decayType)
-			{
-				case LINEAR: intensity - decay;
-				case QUADRATIC: intensity * (1 - decay);
-				case CUBIC: intensity * (1 - decay) * (1 - decay);
-				default: intensity;//donothing
-			}
+			intensity -= decay;
 			
 			var finaly = y;
 			
@@ -317,26 +300,18 @@ class FancyLightMask
 		}
 	}
 	
-	private function drawRings(cx:Int, cy:Int, r:Int, map:Array<Int>, w:Int, intensity:Float, decay:Float, decayType:LightDecay)
+	private function drawRings(cx:Int, cy:Int, r:Int, map:Array<Int>, w:Int, intensity:Float, decay:Float)
 	{
 		var kinks:Array<Int> = [0];
 		
 		var c:Int = 0;
 		for (i in 1...r+1)
 		{
-			c = Std.int(255 * intensity);
-			drawRing(cx, cy, i, w, c, kinks, map);
-			intensity = switch(decayType)
-			{
-				case LINEAR: intensity - decay;
-				case QUADRATIC: intensity * (1 - decay);
-				case CUBIC: intensity * ((1 - decay) * (1 - decay));
-				default: intensity;
-			}
+			drawRing(cx, cy, i, w, kinks, map, r, intensity, decay);
 		}
 	}
 	
-	private function drawRing(cx:Int, cy:Int, r:Int, w:Int, col:Int, kinks:Array<Int>, map:Array<Int>):Bool
+	private function drawRing(cx:Int, cy:Int, r:Int, w:Int, kinks:Array<Int>, map:Array<Int>, numRings:Int, intensity:Float, decay:Float):Bool
 	{
 		var y:Int = r;
 		var x:Int = 0;
@@ -345,6 +320,8 @@ class FancyLightMask
 		
 		var pixels:Int = 0;
 		
+		var c:Int = 255;
+		var r2 = numRings * numRings;
 		while (y >= x)
 		{
 			if (e > 0)
@@ -356,20 +333,29 @@ class FancyLightMask
 				{
 					if (kinki < kinks.length && kinks[kinki] != x)
 					{
-						pixels += _setReflectPoint(cx, cy, x-1, y, w, col, map);
+						var kx = x - 1;
+						c = calcLightColor((1 - (kx * kx + y * y) / r2), intensity, decay);
+						
+						pixels += _setReflectPoint(cx, cy, kx, y, w, c, map);
 					}
 					kinks[kinki] = x;
 					kinki++;
 				}
 			}
 			
-			pixels += _setReflectPoint(cx, cy, x, y, w, col, map);
+			c = calcLightColor(1 - ((x * x + y * y) / r2), intensity, decay);
+			pixels += _setReflectPoint(cx, cy, x, y, w, c, map);
 			
 			e += (x + x + 1);
 			x++;
 		}
 		
 		return pixels > 0;
+	}
+	
+	private inline function calcLightColor(n:Float, intensity:Float, decay:Float):Int
+	{
+		return Std.int(255 * n * intensity);
 	}
 	
 	private inline function _setReflectPoint(cx:Int, cy:Int, x:Int, y:Int, w:Int, col:Int, map:Array<Int>):Int
@@ -404,65 +390,5 @@ class FancyLightMask
 		
 		map[i] = value;
 		return 1;
-	}
-}
-
-@:enum abstract LightDecay(Int) from Int to Int
-{
-	var LINEAR:Int = 0;
-	var QUADRATIC:Int = 1;
-	var CUBIC:Int = 2;
-	var NONE:Int = -3;
-}
-
-class Light
-{
-	public var x:Int;
-	public var y:Int;
-	
-	public var intensity:Float;
-	public var decay(default, set):Float;
-	public var decayType:LightDecay = LINEAR;
-	
-	public var visor:Visor;
-	
-	public function new(x:Int, y:Int, intensity:Float, decay:Float, decayType:LightDecay=LINEAR, ?visor:Visor)
-	{
-		this.x = x;
-		this.y = y;
-		this.intensity = intensity;
-		this.decay = decay;
-		this.decayType = decayType;
-		this.visor = visor;
-	}
-	
-	private function set_decay(f:Float):Float
-	{
-		if (f > 1.0) f = 1.0;
-		decay = f;
-		return decay;
-	}
-	
-	public function getRadius(max:Int):Int
-	{
-		if (intensity == 0) return 0;
-		var idecay = 1-decay;
-		var r = 0;
-		var i = intensity;
-		for(j in 0...max)
-		{
-			r++;
-			switch(decayType)
-			{
-				case LINEAR: i -= decay;
-				case QUADRATIC: i -= idecay * idecay;
-				case CUBIC: i -= idecay * idecay * idecay;
-				default://donothing
-			}
-			if (Std.int(i * 255) < 1) {
-				return r;
-			}
-		}
-		return r;
 	}
 }

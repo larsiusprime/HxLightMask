@@ -24,8 +24,8 @@ class Main extends Sprite
 	{
 		super();
 		
-		addChild(new DemoFancyLightMask());
-		//addChild(new DemoShadowMask());
+		//addChild(new DemoFancyLightMask());
+		addChild(new DemoShadowMask());
 		//addChild(new DemoFashLightMask());
 		//addChild(new DemoCircle());
 	}

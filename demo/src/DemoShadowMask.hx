@@ -3,6 +3,7 @@ import flash.display.Bitmap;
 import flash.display.BitmapData;
 import hxlightmask.Direction;
 import hxlightmask.ShadowMask;
+import hxlightmask.Visor;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -194,6 +195,10 @@ class DemoShadowMask extends Sprite
 				bmpData.setPixel(xx, yy, 0xFFFFFF);
 			}
 		}
+		
+		bmpData.setPixel(visor.coneX1, visor.coneY1, 0xFF0000);
+		bmpData.setPixel(visor.coneX2, visor.coneY2, 0x00FF00);
+		bmpData.setPixel(visor.destX, visor.destY, 0xFF00FF);
 	}
 	
 	private inline function idx(x:Int, y:Int):Int { return x + (y * _width); }

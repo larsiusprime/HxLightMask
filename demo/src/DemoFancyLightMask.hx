@@ -4,7 +4,9 @@ import flash.display.BitmapData;
 import hxlightmask.Direction;
 import hxlightmask.FancyLightMask;
 import hxlightmask.FastLightMask;
+import hxlightmask.Light;
 import hxlightmask.ShadowMask;
+import hxlightmask.Visor;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -112,7 +114,7 @@ class DemoFancyLightMask extends Sprite
 		visor = new Visor(64, 64, 1, 1);
 		visor.fovRadians = Math.PI / 5;
 		
-		light = new Light(64, 64, 1, 0.025, LINEAR);
+		light = new Light(64, 64, 1, 0.05);
 		lightMask.addLight(light);
 		lightMask.computeMask(walls);
 		
