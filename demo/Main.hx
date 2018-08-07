@@ -1,9 +1,10 @@
-package;
+package demo;
 
-import demo.src.DemoCircle;
-import demo.src.DemoFastLightMask;
-import demo.src.DemoFancyLightMask;
-import demo.src.DemoShadowMask;
+import demo.DemoCircle;
+import demo.DemoFastLightMask;
+import demo.DemoFancyLightMask;
+import demo.DemoLightAndShadowMask;
+import demo.DemoShadowMask;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.io.Bytes;
@@ -24,9 +25,10 @@ class Main extends Sprite
 	{
 		super();
 		
+		addChild(new DemoLightAndShadowMask());
 		//addChild(new DemoFancyLightMask());
-		addChild(new DemoShadowMask());
-		//addChild(new DemoFashLightMask());
+		//addChild(new DemoShadowMask());
+		//addChild(new DemoFastLightMask());
 		//addChild(new DemoCircle());
 	}
 }
