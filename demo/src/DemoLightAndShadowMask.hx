@@ -17,7 +17,7 @@ import openfl.events.KeyboardEvent;
  * ...
  * @author 
  */
-class DemoLightAndShadowMask extends Sprite
+class DemoLightAndShadowMask extends Sprite implements IDestroyable
 {
 	private var bmpData:BitmapData;
 	
@@ -126,6 +126,12 @@ class DemoLightAndShadowMask extends Sprite
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		draw();
+	}
+	
+	public function destroy()
+	{
+		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	private function onKeyDown(e:KeyboardEvent)

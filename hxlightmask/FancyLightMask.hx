@@ -13,14 +13,12 @@ class FancyLightMask
 	public var mask:Array<Int>;
 	
 	public var lights:Array<Light>;
-	public var visors:Array<Visor>;
 	
 	public function new(width:Int, height:Int) 
 	{
 		mask = [for (i in 0...(width * height)){0;}];
 		width_ = width;
 		height_ = height;
-		visors = [];
 		lights = [];
 	}
 	
@@ -51,29 +49,8 @@ class FancyLightMask
 	}
 	
 	/**
-	 * Add a visor to the mask
-	 * @param	x
-	 * @param	y
-	 * @param	br
-	 */
-	public function addVisor(v:Visor)
-	{
-		visors.push(v);
-	}
-	
-	public function removeVisor(v:Visor)
-	{
-		visors.remove(v);
-	}
-	
-	public function clearVisors()
-	{
-		visors.splice(0, visors.length);
-	}
-	
-	/**
 	 * Compute the mask
-	 * Compute which tiles are visible from any of the visors
+	 * Compute which tiles are lit
 	 * @param	walls
 	 */
 	public function computeMask(walls:Array<Int>)
@@ -156,7 +133,7 @@ class FancyLightMask
 		var myWalls = clipMap(walls, ulx, uly, myW, myH, width_);
 		
 		var s:ShadowMask = new ShadowMask(myW, myH);
-		s.addVisor(new Visor(lx, ly, 0, 0, Direction.NORTH));
+		s.addVisor(new Visveor(lx, ly, 0, 0, Direction.NORTH));
 		s.addVisor(new Visor(lx, ly, 0, 0, Direction.EAST));
 		s.addVisor(new Visor(lx, ly, 0, 0, Direction.SOUTH));
 		s.addVisor(new Visor(lx, ly, 0, 0, Direction.WEST));

@@ -1,10 +1,10 @@
-package;
-
+package demo;
+import demo.src.DemoFancyLightMask;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import hxlightmask.Direction;
-import hxlightmask.ShadowMask;
-import hxlightmask.Visor;
+import hxlightmask.FancyLightMask;
+import hxlightmask.Light;
 import openfl.Lib;
 import openfl.display.Sprite;
 import openfl.events.Event;
@@ -14,19 +14,18 @@ import openfl.events.KeyboardEvent;
  * ...
  * @author 
  */
-class DemoShadowMask extends Sprite implements IDestroyable
+class DemoFancyLightMask extends Sprite
 {
 	private var bmpData:BitmapData;
 	
-	private var shadows:Array<Int>;
 	private var lights:Array<Int>;
 	private var walls:Array<Int>;
 	
 	private var _width:Int = 128;
 	private var _height:Int = 128;
 	
-	private var visor:Visor;
-	private var shadowMask:ShadowMask;
+	private var light:Light;
+	private var lightMask:FancyLightMask;
 	
 	private var mx:Int = 0;
 	private var my:Int = 0;
@@ -106,42 +105,19 @@ class DemoShadowMask extends Sprite implements IDestroyable
 		bmp.scaleX = 4;
 		bmp.scaleY = 4;
 		
-		shadowMask = new ShadowMask(_width, _height);
+		lightMask = new FancyLightMask(_width, _height);
 		
-		visor = new Visor(64, 64, 1, 1);
-		visor.fovRadians = Math.PI / 5;
-		shadowMask.addVisor(visor);
-		shadowMask.computeMask(walls);
+		light = new Light(64, 64, 1, 0.025);
+		lightMask.addLight(light);
+		lightMask.computeMask(walls);
 		
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		draw();
 	}
 	
 	public function destroy()
 	{
-		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
-		Lib.current.stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
-	}
-	
-	private function onKeyDown(e:KeyboardEvent)
-	{
-		if (e.keyCode == 37) 
-		{
-			visor.getRotated((-Math.PI / 180), visor);
-		}
-		else if (e.keyCode == 39)
-		{
-			visor.getRotated((Math.PI / 180), visor);
-		}
-		
-		if (e.keyCode == 38)
-		{
-			visor.fovRadians += (Math.PI / 180);
-		}
-		else if (e.keyCode == 40)
-		{
-			visor.fovRadians -= (Math.PI / 180);
-		}
+		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	private var ticks:Int = 0;
@@ -166,13 +142,8 @@ class DemoShadowMask extends Sprite implements IDestroyable
 		mx = _mx;
 		my = _my;
 		
-		visor.x = mx;
-		visor.y = my;
-		
-		shadowMask.reset();
-		
-		shadowMask.computeMask(walls);
-		
+		light.x = mx;
+		light.y = my;
 		
 		draw();
 	}
@@ -180,6 +151,11 @@ class DemoShadowMask extends Sprite implements IDestroyable
 	private function draw()
 	{
 		bmpData.fillRect(bmpData.rect, 0);
+		
+		lightMask.reset();
+		lightMask.computeMask(walls);
+		
+		lights = lightMask.mask;
 		
 		for(i in 0...walls.length)
 		{
@@ -191,21 +167,17 @@ class DemoShadowMask extends Sprite implements IDestroyable
 			}
 		}
 		
-		shadows = shadowMask.mask;
-		
-		for (i in 0...shadows.length)
+		for (i in 0...lights.length)
 		{
-			if (shadows[i] == 1)
+			if (lights[i] > 0)
 			{
 				var yy:Int = Std.int(i / _width);
 				var xx:Int = i % _width;
-				bmpData.setPixel(xx, yy, 0xFFFFFF);
+				var c:Int = lights[i];
+				c = c << 16 | c << 8 | c;
+				bmpData.setPixel(xx, yy, c);
 			}
 		}
-		
-		bmpData.setPixel(visor.coneX1, visor.coneY1, 0xFF0000);
-		bmpData.setPixel(visor.coneX2, visor.coneY2, 0x00FF00);
-		bmpData.setPixel(visor.destX, visor.destY, 0xFF00FF);
 	}
 	
 	private inline function idx(x:Int, y:Int):Int { return x + (y * _width); }

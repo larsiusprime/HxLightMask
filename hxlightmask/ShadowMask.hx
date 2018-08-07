@@ -65,7 +65,7 @@ class ShadowMask
 	{
 		for (v in visors)
 		{
-			sweepVisor2(walls, v);
+			sweepVisor(walls, v);
 		}
 	}
 	 
@@ -84,7 +84,7 @@ class ShadowMask
 	 */
 	private inline function idx(x:Int, y:Int):Int { return x + (y * width_); }
 	
-	private function sweepVisor2(walls:Array<Int>, visor:Visor)
+	private function sweepVisor(walls:Array<Int>, visor:Visor)
 	{
 		if (visor.quadrant != Direction.NONE)
 		{
@@ -140,174 +140,6 @@ class ShadowMask
 				}
 			}
 		}
-	}
-	
-	private function sweepVisor(walls:Array<Int>, visor:Visor)
-	{
-		var visor1 = new Visor(0, 0, 0, 0);
-		var visor2 = new Visor(0, 0, 0, 0);
-		
-		visor.getRotated (-visor.fovRadians/2, visor1);
-		visor.getRotated ( visor.fovRadians/2, visor2);
-		
-		calcVisorDestination(visor);
-		calcVisorDestination(visor1);
-		calcVisorDestination(visor2);
-		
-		if (visor1.destY == visor2.destY)
-		{
-			var lo = visor1.destX;
-			var hi = visor2.destX;
-			if (visor2.destX < visor1.destX)
-			{
-				lo = visor2.destX;
-				hi = visor1.destX;
-			}
-			for (x in lo...hi + 1)
-			{
-				drawLine(walls, visor1.x, visor1.y, x, visor1.destY);
-			}
-		}
-		else if (visor1.destX == visor2.destX)
-		{
-			var lo = visor1.destY;
-			var hi = visor2.destY;
-			if (visor2.destY < visor1.destY)
-			{
-				lo = visor2.destY;
-				hi = visor1.destY;
-			}
-			for (y in lo...hi + 1)
-			{
-				drawLine(walls, visor1.x, visor1.y, visor1.destX, y);
-			}
-		}
-		else
-		{
-			var lox = visor1.destX;
-			var hix = visor2.destX;
-			if (visor2.destX < visor1.destX)
-			{
-				lox = visor2.destX;
-				hix = visor1.destX;
-			}
-			var loy = visor1.destY;
-			var hiy = visor2.destY;
-			if (visor2.destY < visor1.destY)
-			{
-				loy = visor2.destY;
-				hiy = visor1.destY;
-			}
-			
-			var destX = 0;
-			var destY = 0;
-			
-			if (visor.destX > visor.x)
-			{
-				if (visor.destY > visor.y)
-				{
-					if (visor.destX == visor1.destX)
-					{
-						destX = visor1.destX;
-						destY = visor2.destY;
-					}
-					else
-					{
-						if (visor.destY == visor2.destY)
-						{
-							destX = visor1.destX;
-							destY = visor2.destY;
-						}
-						else
-						{
-							destX = visor2.destX;
-							destY = visor1.destY;
-						}
-					}
-				}
-				else if (visor.destY <= visor.y)
-				{
-					if (visor.destY == visor2.destY)
-					{
-						destX = visor1.destX;
-						destY = visor2.destY;
-					}
-					else
-					{
-						if (visor.destX == visor1.destX)
-						{
-							destX = visor1.destX;
-							destY = visor2.destY;
-						}
-						else
-						{
-							destX = visor2.destX;
-							destY = visor1.destY;
-						}
-					}
-				}
-			}
-			else
-			{
-				if (visor.destY < visor.y)
-				{
-					if (visor.destX == visor2.destX)
-					{
-						destX = visor2.destX;
-						destY = visor1.destY;
-					}
-					else
-					{
-						if (visor.destY == visor1.destY)
-						{
-							destX = visor2.destX;
-							destY = visor1.destY;
-						}
-						else
-						{
-							destX = visor1.destX;
-							destY = visor2.destY;
-						}
-					}
-				}
-				else if (visor.destY >= visor.y)
-				{
-					if (visor.destY == visor2.destY)
-					{
-						destX = visor1.destX;
-						destY = visor2.destY;
-					}
-					else
-					{
-						if (visor.destX == visor1.destX)
-						{
-							destX = visor1.destX;
-							destY = visor2.destY;
-						}
-						else
-						{
-							destX = visor2.destX;
-							destY = visor1.destY;
-						}
-					}
-				}
-			}
-			
-			for (x in lox...hix + 1)
-			{
-				drawLine(walls, visor.x, visor.y, x, destY);
-			}
-			for (y in loy...hiy + 1)
-			{
-				drawLine(walls, visor.x, visor.y, destX, y);
-			}
-		}
-		
-		visor.coneX1 = visor1.destX;
-		visor.coneY1 = visor1.destY;
-		
-		visor.coneX2 = visor2.destX;
-		visor.coneY2 = visor2.destY;
 	}
 	
 	/**

@@ -12,10 +12,10 @@ import openfl.Lib;
  * ...
  * @author 
  */
-class DemoFastLightMask extends Sprite
+class DemoFastLightMask extends Sprite implements IDestroyable
 {
-	static inline var WIDTH:Int = 80;
-	static inline var HEIGHT:Int = 60;
+	static inline var WIDTH:Int = 50;
+	static inline var HEIGHT:Int = 50;
 	static inline var ZOOM:Int = 10;
 	
 	private var bmpData:BitmapData;
@@ -41,6 +41,11 @@ class DemoFastLightMask extends Sprite
 		addChild(bmp);
 		
 		demo();
+	}
+	
+	public function destroy()
+	{
+		Lib.current.stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	private static inline function OFFSET(x:Int, y:Int)

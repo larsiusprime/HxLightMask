@@ -16,7 +16,7 @@ import openfl.events.KeyboardEvent;
  * ...
  * @author 
  */
-class DemoFancyLightMask extends Sprite
+class DemoFancyLightMask extends Sprite implements IDestroyable
 {
 	private var bmpData:BitmapData;
 	
@@ -116,6 +116,11 @@ class DemoFancyLightMask extends Sprite
 		
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		draw();
+	}
+	
+	public function destroy()
+	{
+		Lib.current.stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
 	}
 	
 	private var ticks:Int = 0;
