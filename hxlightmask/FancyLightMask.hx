@@ -139,16 +139,22 @@ class FancyLightMask
 		
 		if (ulx < 0) 
 		{
-			ulx = 0;
 			lx += ulx;
+			ulx = 0;
 		}
 		if (uly < 0)
 		{
-			uly = 0;
 			ly += uly;
+			uly = 0;
 		}
-		if (lrx >= width_) lrx = width_-1;
-		if (lry >= height_) lry = height_-1;
+		if (lrx > width_) 
+		{
+			lrx = width_;
+		}
+		if (lry > height_) 
+		{
+			lry = height_;
+		}
 		var myW = lrx - ulx;
 		var myH = lry - uly;
 		
@@ -391,10 +397,11 @@ class FancyLightMask
 	private inline function _setMapPt(x:Int, y:Int, w:Int, map:Array<Int>, value:Int):Int
 	{
 		if (x < 0) return 0;
-		if (x >= width_) return 0;
+		if (x >= w) return 0;
 		if (y < 0) return 0;
-		if (y >= height_) return 0;
 		var i = idxw(x, y, w);
+		if (i >= map.length) return 0;
+		
 		map[i] = value;
 		return 1;
 	}
