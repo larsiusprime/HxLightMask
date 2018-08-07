@@ -133,7 +133,7 @@ class FancyLightMask
 		var myWalls = clipMap(walls, ulx, uly, myW, myH, width_);
 		
 		var s:ShadowMask = new ShadowMask(myW, myH);
-		s.addVisor(new Visveor(lx, ly, 0, 0, Direction.NORTH));
+		s.addVisor(new Visor(lx, ly, 0, 0, Direction.NORTH));
 		s.addVisor(new Visor(lx, ly, 0, 0, Direction.EAST));
 		s.addVisor(new Visor(lx, ly, 0, 0, Direction.SOUTH));
 		s.addVisor(new Visor(lx, ly, 0, 0, Direction.WEST));
