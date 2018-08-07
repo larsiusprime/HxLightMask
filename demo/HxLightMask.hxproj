@@ -22,11 +22,11 @@
     <class path="src" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\core\openfl" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\extras" />
-    <class path="bin\windows\haxe" />
+    <class path="bin\html5\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="openfl=8.2.2&#xA;lime=6.4.0&#xA;hxlightmap=0.0.0&#xA;hxlightmask=0.0.0&#xA;tools=6.4.0&#xA;no-compilation&#xA;native&#xA;lime-native&#xA;lime-vorbis&#xA;openfl-native&#xA;lime-cffi&#xA;windows&#xA;desktop&#xA;display" />
+    <option directives="openfl=8.2.2&#xA;lime=6.4.0&#xA;hxlightmap=0.0.0&#xA;hxlightmask=0.0.0&#xA;tools=6.4.0&#xA;howlerjs&#xA;no-compilation&#xA;openfl-html5&#xA;lime-html5&#xA;html5&#xA;web&#xA;html5&#xA;display" />
     <option flashStrict="False" />
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
