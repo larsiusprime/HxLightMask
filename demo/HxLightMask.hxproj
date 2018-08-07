@@ -22,7 +22,7 @@
     <class path="src" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\core\openfl" />
     <class path="T:\git\DefendersQuest1\libs\openfl8\openfl\src\externs\extras" />
-    <class path="bin\neko\haxe" />
+    <class path="bin\windows\haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
@@ -31,7 +31,7 @@
     <option noInlineOnDebug="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;--remap flash:openfl&#xA;-debug " />
+    <option additional="--macro openfl._internal.utils.ExtraParams.include()&#xA;--macro lime.Lib.extraParams()&#xA;--remap flash:openfl" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

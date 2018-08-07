@@ -1,4 +1,4 @@
-package demo.src;
+package demo;
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import openfl.display.Sprite;
