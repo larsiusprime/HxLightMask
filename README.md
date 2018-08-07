@@ -81,7 +81,7 @@ The demos will run on any platform OpenFL supports, including win/mac/linux dest
 	lightmask.reset();
 	
 	// Compute the mask
-    // Pass the `walls` vector to the compute function
+    // Pass the `walls` array to the compute function
     lightmask.computeMask(walls);
 ```
 
@@ -112,8 +112,8 @@ The demos will run on any platform OpenFL supports, including win/mac/linux dest
 	shadowmask.reset();
 	
 	// Compute the mask
-    // Pass the `walls` vector to the compute function
-    shadowmask.computeMask(walls);
+	// Pass the `walls` array to the compute function
+	shadowmask.computeMask(walls);
 ```
 
 
@@ -147,7 +147,7 @@ The demos will run on any platform OpenFL supports, including win/mac/linux dest
     lightmask.addLight(x, y, brightness);
 
     // Compute the mask
-    // Pass the `walls` vector to the compute function
+    // Pass the `walls` array to the compute function
     lightmask.computeMask(walls);
 ```
 
