@@ -1,10 +1,11 @@
-package demo;
+package;
 
-import demo.DemoCircle;
-import demo.DemoFastLightMask;
-import demo.DemoFancyLightMask;
-import demo.DemoLightAndShadowMask;
-import demo.DemoShadowMask;
+import DemoCircle;
+import DemoFastLightMask;
+import DemoFancyLightMask;
+import DemoLightAndShadowMask;
+import DemoShadowMask;
+import Main;
 import flash.display.BitmapData;
 import flash.utils.ByteArray;
 import haxe.io.Bytes;

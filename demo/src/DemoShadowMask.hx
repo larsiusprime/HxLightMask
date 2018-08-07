@@ -1,4 +1,5 @@
-package demo;
+package;
+
 import flash.display.Bitmap;
 import flash.display.BitmapData;
 import hxlightmask.Direction;

@@ -1,10 +1,14 @@
-package demo;
-import flash.display.Bitmap;
-import flash.display.BitmapData;
+package;
+
 import hxlightmask.Direction;
 import hxlightmask.FancyLightMask;
+import hxlightmask.FastLightMask;
 import hxlightmask.Light;
+import hxlightmask.ShadowMask;
+import hxlightmask.Visor;
 import openfl.Lib;
+import openfl.display.Bitmap;
+import openfl.display.BitmapData;
 import openfl.display.Sprite;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
@@ -13,18 +17,21 @@ import openfl.events.KeyboardEvent;
  * ...
  * @author 
  */
-class DemoFancyLightMask extends Sprite
+class DemoLightAndShadowMask extends Sprite
 {
 	private var bmpData:BitmapData;
 	
+	private var shadows:Array<Int>;
 	private var lights:Array<Int>;
 	private var walls:Array<Int>;
 	
 	private var _width:Int = 128;
 	private var _height:Int = 128;
 	
+	private var visor:Visor;
 	private var light:Light;
 	private var lightMask:FancyLightMask;
+	private var shadowMask:ShadowMask;
 	
 	private var mx:Int = 0;
 	private var my:Int = 0;
@@ -105,13 +112,41 @@ class DemoFancyLightMask extends Sprite
 		bmp.scaleY = 4;
 		
 		lightMask = new FancyLightMask(_width, _height);
+		shadowMask = new ShadowMask(_width, _height);
 		
-		light = new Light(64, 64, 1, 0.025);
+		visor = new Visor(64, 64, 1, 1);
+		visor.fovRadians = Math.PI / 5;
+		
+		light = new Light(64, 64, 1, 0.0125);
 		lightMask.addLight(light);
 		lightMask.computeMask(walls);
+		shadowMask.addVisor(visor);
+		shadowMask.computeMask(walls);
 		
+		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
 		draw();
+	}
+	
+	private function onKeyDown(e:KeyboardEvent)
+	{
+		if (e.keyCode == 37) 
+		{
+			visor.getRotated((-Math.PI / 180), visor);
+		}
+		else if (e.keyCode == 39)
+		{
+			visor.getRotated((Math.PI / 180), visor);
+		}
+		
+		if (e.keyCode == 38)
+		{
+			visor.fovRadians += (Math.PI / 180);
+		}
+		else if (e.keyCode == 40)
+		{
+			visor.fovRadians -= (Math.PI / 180);
+		}
 	}
 	
 	private var ticks:Int = 0;
@@ -138,6 +173,8 @@ class DemoFancyLightMask extends Sprite
 		
 		light.x = mx;
 		light.y = my;
+		visor.x = mx;
+		visor.y = my;
 		
 		draw();
 	}
@@ -146,10 +183,14 @@ class DemoFancyLightMask extends Sprite
 	{
 		bmpData.fillRect(bmpData.rect, 0);
 		
+		shadowMask.reset();
+		shadowMask.computeMask(walls);
+		
 		lightMask.reset();
 		lightMask.computeMask(walls);
 		
 		lights = lightMask.mask;
+		shadows = shadowMask.mask;
 		
 		for(i in 0...walls.length)
 		{
@@ -163,7 +204,7 @@ class DemoFancyLightMask extends Sprite
 		
 		for (i in 0...lights.length)
 		{
-			if (lights[i] > 0)
+			if (shadows[i] != 0 && lights[i] > 0)
 			{
 				var yy:Int = Std.int(i / _width);
 				var xx:Int = i % _width;
