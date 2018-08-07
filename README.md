@@ -1,5 +1,5 @@
 # HxLightMask
-A collection of tiny-ish 2D lighting engine tools for Haxe (for grid-based games and whatnot)
+A collection of tiny-ish 2D lighting engine tools for Haxe (for grid-based games and whatnot). They have no external dependencies other than Haxe and the Haxe standard library, and are framework agnostic. The included demos use OpenFL for rendering & input, but you can use whatever you want in your own projects.
 
 ![](preview.gif)
 
@@ -32,7 +32,7 @@ Originally ported from [nick-paul/LightMask](https://github.com/nick-paul/LightM
 ![](fast_lightmask.gif)
 
 # Running the demos
-The demo requires OpenFL 8 to run (older versions will probably work too). The FastLightMask engine itself is a single Haxe file, has no external dependencies, and is framework agnostic.
+The demos require OpenFL 8 to run (older versions will probably work too). 
 
 Install libraries:
 ```
