@@ -133,10 +133,10 @@ class FancyLightMask
 		var myWalls = clipMap(walls, ulx, uly, myW, myH, width_);
 		
 		var s:ShadowMask = new ShadowMask(myW, myH);
-		s.addVisor(new Visor(lx, ly, 0, 0, Direction.NORTH));
-		s.addVisor(new Visor(lx, ly, 0, 0, Direction.EAST));
-		s.addVisor(new Visor(lx, ly, 0, 0, Direction.SOUTH));
-		s.addVisor(new Visor(lx, ly, 0, 0, Direction.WEST));
+		s.addVisor(Visor.forQuadrant(lx, ly, Direction.NORTH));
+		s.addVisor(Visor.forQuadrant(lx, ly, Direction.EAST));
+		s.addVisor(Visor.forQuadrant(lx, ly, Direction.SOUTH));
+		s.addVisor(Visor.forQuadrant(lx, ly, Direction.WEST));
 		s.computeMask(myWalls);
 		
 		var myLight = [for (i in 0...myW * myH){0; }];
