@@ -2,3 +2,5 @@
 demo/bin/
 
 demo/HxLightMask\.hxproj
+
+*.hxproj
