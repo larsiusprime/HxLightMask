@@ -13,6 +13,7 @@ class FancyLightMask
 	public var mask:Array<Int>;
 	
 	public var lights:Array<Light>;
+	public var ambient(default, null):Int = 0;
 	
 	public function new(width:Int, height:Int) 
 	{
@@ -29,7 +30,7 @@ class FancyLightMask
 	{
 		for (i in 0...mask.length)
 		{
-			mask[i] = 0;
+			mask[i] = ambient;
 		}
 	}
 	
@@ -46,6 +47,13 @@ class FancyLightMask
 	public function clearLights()
 	{
 		lights.splice(0, lights.length);
+	}
+	
+	public function setAmbient(i:Int)
+	{
+		if (i < 0) i = 0;
+		if (i > 255) i = 255;
+		ambient = i;
 	}
 	
 	/**
