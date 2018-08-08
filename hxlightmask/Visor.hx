@@ -26,11 +26,12 @@ class Visor
 	public var coneX2:Int = -1;
 	public var coneY2:Int = -1;
 	
-	public function new(x:Int, y:Int, vecX:Float, vecY:Float)
+	public function new(x:Int, y:Int, vecX:Float, vecY:Float, fovRadians:Float)
 	{
 		this.x = x;
 		this.y = y;
 		setLookVector(vecX, vecY);
+		this.fovRadians = fovRadians;
 	}
 	
 	public function set_fovRadians(r:Float):Float
@@ -66,7 +67,7 @@ class Visor
 	@:access(hxlightmask.Visor)
 	private static function forQuadrant(x:Int, y:Int, quadrant:Direction)
 	{
-		var v = new Visor(x, y, 0, 0);
+		var v = new Visor(x, y, 0, 0, 0);
 		v.quadrant = quadrant;
 		return v;
 	}

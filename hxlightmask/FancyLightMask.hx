@@ -145,7 +145,6 @@ class FancyLightMask
 		s.addVisor(Visor.forQuadrant(lx, ly, Direction.EAST));
 		s.addVisor(Visor.forQuadrant(lx, ly, Direction.SOUTH));
 		s.addVisor(Visor.forQuadrant(lx, ly, Direction.WEST));
-		s.computeMask(myWalls);
 		
 		var myLight = [for (i in 0...myW * myH){0; }];
 		

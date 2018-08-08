@@ -93,8 +93,8 @@ class ShadowMask
 		}
 		else
 		{
-			var visor1 = new Visor(0, 0, 0, 0);
-			var visor2 = new Visor(0, 0, 0, 0);
+			var visor1 = new Visor(0, 0, 0, 0, 0);
+			var visor2 = new Visor(0, 0, 0, 0, 0);
 			
 			visor.getRotated (-visor.fovRadians/2, visor1);
 			visor.getRotated ( visor.fovRadians/2, visor2);
@@ -372,8 +372,8 @@ class ShadowMask
 				finalx = x1 - (x - x1);
 			}
 			
-			if (walls[idx(finalx,y)] == 1) return;
 			mask[idx(finalx, y)] = 1;
+			if (walls[idx(finalx,y)] == 1) return;
 			
 			if (e > 0)
 			{
@@ -414,8 +414,8 @@ class ShadowMask
 				finaly = y1 - (y - y1);
 			}
 			
-			if (walls[idx(x,finaly)] == 1) return;
 			mask[idx(x, finaly)] = 1;
+			if (walls[idx(x,finaly)] == 1) return;
 			
 			if (e > 0)
 			{
