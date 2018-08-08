@@ -5,12 +5,12 @@ package hxlightmask;
  * @author 
  */
 
+@:allow(hxlightmask.FancyLightMask)
+@:allow(hxlightmask.ShadowMask)
 class Visor
 {
 	public var x:Int;
 	public var y:Int;
-	
-	public var quadrant:Direction;
 	
 	public var vecX(default, null):Float;
 	public var vecY(default, null):Float;
@@ -26,11 +26,10 @@ class Visor
 	public var coneX2:Int = -1;
 	public var coneY2:Int = -1;
 	
-	public function new(x:Int, y:Int, vecX:Float, vecY:Float, quadrant:Direction=NONE)
+	public function new(x:Int, y:Int, vecX:Float, vecY:Float)
 	{
 		this.x = x;
 		this.y = y;
-		this.quadrant = quadrant;
 		setLookVector(vecX, vecY);
 	}
 	
@@ -59,5 +58,16 @@ class Visor
 		
 		output.vecX = ca * vecX - sa * vecY;
 		output.vecY = sa * vecX + ca * vecY;
+	}
+	
+	//internal use only:
+	private var quadrant:Direction=Direction.NONE;
+	
+	@:access(hxlightmask.Visor)
+	private static function forQuadrant(x:Int, y:Int, quadrant:Direction)
+	{
+		var v = new Visor(x, y, 0, 0);
+		v.quadrant = quadrant;
+		return v;
 	}
 }
