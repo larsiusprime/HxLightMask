@@ -13,15 +13,12 @@ class Light
 	public var intensity:Float;
 	public var decay(default, set):Float;
 	
-	public var visor:Visor;
-	
-	public function new(x:Int, y:Int, intensity:Float, decay:Float, ?visor:Visor)
+	public function new(x:Int, y:Int, intensity:Float, decay:Float)
 	{
 		this.x = x;
 		this.y = y;
 		this.intensity = intensity;
 		this.decay = decay;
-		this.visor = visor;
 	}
 	
 	private function set_decay(f:Float):Float
