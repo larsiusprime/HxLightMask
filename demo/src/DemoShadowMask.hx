@@ -108,8 +108,7 @@ class DemoShadowMask extends Sprite implements IDestroyable
 		
 		shadowMask = new ShadowMask(_width, _height);
 		
-		visor = new Visor(64, 64, 1, 1);
-		visor.fovRadians = Math.PI / 5;
+		visor = new Visor(64, 64, 1, 1, Math.PI / 5);
 		shadowMask.addVisor(visor);
 		shadowMask.computeMask(walls);
 		

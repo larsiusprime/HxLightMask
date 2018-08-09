@@ -114,6 +114,12 @@ class FancyLightMask
 		var uly = l.y - radius;
 		var lrx = l.x + radius;
 		var lry = l.y + radius;
+		
+		ulx = 0;
+		uly = 0;
+		lrx = width_;
+		lry = height_;
+		
 		var lx = cx - ulx;
 		var ly = cy - uly;
 		
@@ -141,6 +147,7 @@ class FancyLightMask
 		var myWalls = clipMap(walls, ulx, uly, myW, myH, width_);
 		
 		var s:ShadowMask = new ShadowMask(myW, myH);
+		
 		s.addVisor(Visor.forQuadrant(lx, ly, Direction.NORTH));
 		s.addVisor(Visor.forQuadrant(lx, ly, Direction.EAST));
 		s.addVisor(Visor.forQuadrant(lx, ly, Direction.SOUTH));
@@ -151,6 +158,7 @@ class FancyLightMask
 		s.computeMask(myWalls);
 		
 		drawRings(lx, ly, radius, myLight, myW, intensity, decay);
+		
 		
 		for (iy in 0...myH)
 		{
@@ -165,6 +173,30 @@ class FancyLightMask
 				if (yy >= height_) continue;
 				
 				mask[idx(xx, yy)] += (s.mask[idxw(ix, iy, myW)] == 1) ? myLight[idxw(ix, iy, myW)] : 0;
+			}
+		}
+		
+		if (l.visor != null)
+		{
+			var s = new ShadowMask(width_, height_);
+			s.addVisor(l.visor);
+			s.computeMask(walls);
+			var shadows = s.mask;
+			
+			for (iy in 0...height_)
+			{
+				for (ix in 0...width_)
+				{
+					var xx = ix;
+					var yy = iy;
+					
+					if (xx < 0) continue;
+					if (yy < 0) continue;
+					if (xx >= width_) continue;
+					if (yy >= height_) continue;
+					
+					if (shadows[idxw(xx, yy, width_)] == 0) mask[idxw(xx-ulx, yy-uly, myW)] = 0;
+				}
 			}
 		}
 	}

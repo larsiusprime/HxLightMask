@@ -4,7 +4,7 @@ import hxlightmask.Direction;
 import hxlightmask.FancyLightMask;
 import hxlightmask.FastLightMask;
 import hxlightmask.Light;
-import hxlightmask.ShadowMask;
+
 import hxlightmask.Visor;
 import openfl.Lib;
 import openfl.display.Bitmap;
@@ -31,7 +31,6 @@ class DemoLightAndShadowMask extends Sprite implements IDestroyable
 	private var visor:Visor;
 	private var light:Light;
 	private var lightMask:FancyLightMask;
-	private var shadowMask:ShadowMask;
 	
 	private var mx:Int = 0;
 	private var my:Int = 0;
@@ -112,16 +111,12 @@ class DemoLightAndShadowMask extends Sprite implements IDestroyable
 		bmp.scaleY = 4;
 		
 		lightMask = new FancyLightMask(_width, _height);
-		shadowMask = new ShadowMask(_width, _height);
 		
-		visor = new Visor(64, 64, 1, 1);
-		visor.fovRadians = Math.PI / 5;
+		visor = new Visor(64, 64, 1, 1, Math.PI/5);
 		
-		light = new Light(64, 64, 1, 0.0125);
+		light = new Light(64, 64, 1, 0.0125, visor);
 		lightMask.addLight(light);
 		lightMask.computeMask(walls);
-		shadowMask.addVisor(visor);
-		shadowMask.computeMask(walls);
 		
 		Lib.current.stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
 		Lib.current.stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -189,14 +184,10 @@ class DemoLightAndShadowMask extends Sprite implements IDestroyable
 	{
 		bmpData.fillRect(bmpData.rect, 0);
 		
-		shadowMask.reset();
-		shadowMask.computeMask(walls);
-		
 		lightMask.reset();
 		lightMask.computeMask(walls);
 		
 		lights = lightMask.mask;
-		shadows = shadowMask.mask;
 		
 		for(i in 0...walls.length)
 		{
@@ -210,7 +201,7 @@ class DemoLightAndShadowMask extends Sprite implements IDestroyable
 		
 		for (i in 0...lights.length)
 		{
-			if (shadows[i] != 0 && lights[i] > 0)
+			if (lights[i] > 0)
 			{
 				var yy:Int = Std.int(i / _width);
 				var xx:Int = i % _width;
