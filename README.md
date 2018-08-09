@@ -20,7 +20,8 @@ This is also a simple ray-casting light mask, but this lets you decide what's NO
 
 You can place `Visor`s in the scene that represent visible areas, and you can build a mask of everything that is not visible from any of your specified visors. 
 The preview gif at the very top of this page is an example of using a `ShadowMask` and `FancyLightMask` together to create a flashlight effect -- a `Visor` and 
-a `Light` are placed in the same location and move together, and the shadow mask is used to occlude everything but the desired light cone.
+a `Light` are placed in the same location and move together, and the shadow mask is used to occlude everything but the desired light cone. For convenience and efficiency,
+you can accomplish this simply by attaching a `Visor` directly to a `Light` and feeding it into `FancyLightMask`.
 
 # FastLightMask
 
@@ -64,7 +65,6 @@ The demos will run on any platform OpenFL supports, including win/mac/linux dest
 	// Stored in a single dimensional array
 	// To set a wall value at (x,y) use walls[x * WIDTH * y] =
 	var walls:Array<Int> = [for (i in 0...WIDTH * HEIGHT) {0;}];
-		
 ```
 
 ### Adding lights and computing the mask
@@ -72,6 +72,10 @@ The demos will run on any platform OpenFL supports, including win/mac/linux dest
 ```Haxe
 	// Create a light
 	var light:Light = new Light(64, 64, 1.0, 0.025); //x, y, intensity, decay
+	
+	// Alternatively:
+	// var visor:Visor = new Visor(64, 64, 1.0, 0.0, Math.PI/6); //x, y, direction vector (x), direction vector (y), field of view angle (in radians)
+	// var light:Light = new Light(64, 64, 1.0, 0.025, visor);   //create a light with a visor attached, the visor will be used to mask it during light calculation
 	
 	//Add the light (unlike FastLightMask, no need to re-add it after reset())
 	lightmask.add(light);
