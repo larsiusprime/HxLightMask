@@ -13,8 +13,9 @@ class ShadowMask
 	
 	/**The shadow mask: All values range from 0 to 1**/
 	public var mask:Array<Int>;
-	
 	public var visors:Array<Visor>;
+	
+	private var visorPool:VisorPool = new VisorPool();
 	
 	public function new(width:Int, height:Int) 
 	{
@@ -86,13 +87,43 @@ class ShadowMask
 	
 	private function sweepVisor(walls:Array<Int>, visor:Visor)
 	{
+		var oldFovRadians = visor.fovRadians;
+		if (Math.abs(visor.fovRadians - Math.PI / 2) < 0.0001 && Math.abs(visor.vecX - visor.vecY) < 0.0001)
+		{
+			//If the visor angle is EXACTLY 90 degrees AND the look vector is exactly 45 degrees, then there will be a glitch unless we adjust one of the values
+			//add a ridiculously tiny amount to the field of view
+			visor.fovRadians += 0.000000000001; 
+			//we will reset to the original value at the end of the function
+		}
 		if (visor.quadrant != Direction.NONE)
 		{
+			//We're sweeping a quadrant rather than a fixed field of view:
 			sweepMapQuadrant(walls, visor, visor.quadrant, true);
 			return;
 		}
 		else
 		{
+			//If our field of view is too broad, split it up and sweep it in pieces:
+			var fov = Math.abs(visor.fovRadians);
+			
+			if (fov > Math.PI / 2)
+			{
+				var fovEach = visor.fovRadians / 2;
+				var visor1 = visorPool.get(visor.x, visor.y, visor.vecX, visor.vecY, fov / 2);
+				var visor2 = visorPool.get(visor.x, visor.y, visor.vecX, visor.vecY, fov / 2);
+				visor.getRotated( -fov/4, visor1);
+				visor.getRotated( fov/4, visor2);
+				
+				//If either of these is still too broad it will be handled recursively:
+				sweepVisor(walls, visor1);
+				sweepVisor(walls, visor2);
+				
+				visorPool.put(visor1);
+				visorPool.put(visor2);
+				return;
+			}
+			
+			//Do the normal sweeping
 			var visor1 = new Visor(0, 0, 0, 0, 0);
 			var visor2 = new Visor(0, 0, 0, 0, 0);
 			
@@ -140,6 +171,7 @@ class ShadowMask
 				}
 			}
 		}
+		visor.fovRadians = oldFovRadians;
 	}
 	
 	/**
@@ -424,5 +456,76 @@ class ShadowMask
 			}
 			e = e + 2 * dx;
 		}
+	}
+}
+
+/**
+* Based on HaxeFlixel's FlxPool
+*/
+class VisorPool
+{
+	public var length(get, never):Int;
+	
+	/**
+	 * Objects aren't actually removed from the array in order to improve performance.
+	 * _count keeps track of the valid, accessible pool objects.
+	 */
+	var _count:Int = 0;
+	var _pool:Array<Visor>;
+	
+	public function new()
+	{
+		_pool = [];
+		_count = 0;
+	}
+	
+	public function get(x:Int, y:Int, vecX:Float, vecY:Float, fovRadians:Float):Visor
+	{
+		if (_count == 0)
+		{
+			return new Visor(x, y, vecX, vecY, fovRadians);
+		}
+		var v:Visor = _pool[--_count];
+		v.x = x;
+		v.y = y;
+		v.vecX = vecX;
+		v.vecY = vecY;
+		v.fovRadians = fovRadians;
+		return v;
+	}
+	
+	public function put(v:Visor):Void
+	{
+		// we don't want to have the same object in the accessible pool twice (ok to have multiple in the inaccessible zone)
+		if (v != null)
+		{
+			var i:Int = _pool.indexOf(v);
+			// if the object's spot in the pool was overwritten, or if it's at or past _count (in the inaccessible zone)
+			if (i == -1 || i >= _count)
+			{
+				_pool[_count++] = v;
+			}
+		}
+	}
+	
+	public function putUnsafe(v:Visor):Void
+	{
+		if (v != null)
+		{
+			_pool[_count++] = v;
+		}
+	}
+	
+	public function clear():Array<Visor>
+	{
+		_count = 0;
+		var oldPool = _pool;
+		_pool = [];
+		return oldPool;
+	}
+	
+	inline function get_length():Int
+	{
+		return _count;
 	}
 }

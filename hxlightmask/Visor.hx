@@ -12,8 +12,8 @@ class Visor
 	public var x:Int;
 	public var y:Int;
 	
-	public var vecX(default, null):Float;
-	public var vecY(default, null):Float;
+	public var vecX:Float;
+	public var vecY:Float;
 	
 	public var destX:Int = -1;
 	public var destY:Int = -1;
@@ -36,8 +36,8 @@ class Visor
 	
 	public function set_fovRadians(r:Float):Float
 	{
-		if (r > Math.PI/2) r = Math.PI/2;
-		if (r < -Math.PI/2) r = -Math.PI/2;
+		if (r < 0) r = 0;
+		if (r > Math.PI * 2) r =  Math.PI * 2;
 		fovRadians = r;
 		return r;
 	}
@@ -65,10 +65,11 @@ class Visor
 	private var quadrant:Direction=Direction.NONE;
 	
 	@:access(hxlightmask.Visor)
-	private static function forQuadrant(x:Int, y:Int, quadrant:Direction)
+	private static function forQuadrant(x:Int, y:Int, quadrant:Direction, output:Visor)
 	{
-		var v = new Visor(x, y, 0, 0, 0);
-		v.quadrant = quadrant;
-		return v;
+		output.x = x;
+		output.y = y;
+		output.quadrant = quadrant;
+		return output;
 	}
 }

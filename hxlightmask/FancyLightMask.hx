@@ -1,4 +1,5 @@
 package hxlightmask;
+import hxlightmask.ShadowMask.VisorPool;
 
 /**
  * @author 
@@ -14,6 +15,8 @@ class FancyLightMask
 	
 	public var lights:Array<Light>;
 	public var ambient(default, null):Int = 0;
+	
+	private var visorPool:VisorPool = new VisorPool();
 	
 	public function new(width:Int, height:Int) 
 	{
@@ -151,10 +154,10 @@ class FancyLightMask
 		}
 		else
 		{
-			s.addVisor(Visor.forQuadrant(lx, ly, Direction.NORTH));
-			s.addVisor(Visor.forQuadrant(lx, ly, Direction.EAST));
-			s.addVisor(Visor.forQuadrant(lx, ly, Direction.SOUTH));
-			s.addVisor(Visor.forQuadrant(lx, ly, Direction.WEST));
+			s.addVisor(Visor.forQuadrant(lx, ly, Direction.NORTH, visorPool.get(0,0,0,0,0)));
+			s.addVisor(Visor.forQuadrant(lx, ly, Direction.EAST, visorPool.get(0,0,0,0,0)));
+			s.addVisor(Visor.forQuadrant(lx, ly, Direction.SOUTH, visorPool.get(0,0,0,0,0)));
+			s.addVisor(Visor.forQuadrant(lx, ly, Direction.WEST, visorPool.get(0,0,0,0,0)));
 			s.computeMask(myWalls);
 		}
 		
